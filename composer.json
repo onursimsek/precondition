@@ -1,0 +1,59 @@
+{
+    "name": "onursimsek/precondition",
+    "description": "HTTP Precondition implementation for Laravel",
+    "keywords": [
+        "laravel",
+        "precondition",
+        "request"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Onur Şimşek",
+            "email": "posta@onursimsek.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2|^8.3",
+        "illuminate/cache": "^10.0",
+        "illuminate/contracts": "^10.0",
+        "illuminate/database": "^10.0",
+        "illuminate/http": "^10.0",
+        "illuminate/redis": "^10.0",
+        "illuminate/support": "^10.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.48",
+        "orchestra/testbench": "^8.21",
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Precondition\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Precondition\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Precondition\\PreconditionServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage",
+        "test-coverage-text": "vendor/bin/phpunit --coverage-text",
+        "format": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
