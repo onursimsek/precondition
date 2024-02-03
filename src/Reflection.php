@@ -9,19 +9,26 @@ use OnurSimsek\Precondition\Contracts\Attribute;
 use ReflectionAttribute;
 use ReflectionMethod;
 
-class Reflection extends ReflectionMethod
+class Reflection
 {
-    /** @var ReflectionAttribute[] */
-    private array $attributes;
+    private ReflectionMethod $reflectionMethod;
+    private ReflectionAttribute $attribute;
 
-    public function __construct(string $controller, string $action)
+    public function reflect(string $controller, string $action): static
     {
-        parent::__construct($controller, $action);
+        $this->reflectionMethod = new ReflectionMethod($controller, $action);
+        unset($this->attribute);
+
+        return $this;
     }
 
-    private function getPreconditionAttribute(): array
+    private function getPreconditionAttribute(): ?ReflectionAttribute
     {
-        return $this->attributes ?? $this->attributes = $this->getAttributes(Precondition::class);
+        if (!$attributes = $this->reflectionMethod->getAttributes(Precondition::class)) {
+            return null;
+        }
+
+        return $this->attribute ??= $attributes[0];
     }
 
     public function hasPreconditionAttribute(): bool
@@ -31,6 +38,6 @@ class Reflection extends ReflectionMethod
 
     public function getPreconditionInstance(): Attribute
     {
-        return $this->getPreconditionAttribute()[0]->newInstance();
+        return $this->getPreconditionAttribute()->newInstance();
     }
 }

@@ -14,22 +14,23 @@ use OnurSimsek\Precondition\Validators\PreconditionValidator;
 #[Attribute(Attribute::TARGET_METHOD)]
 class Precondition implements AttributeContract
 {
-    public function __construct(private readonly string $validator)
+    private PreconditionValidator $validator;
+
+    public function __construct(string $validator)
     {
+        $this->validator = new $validator();
     }
 
     public function validate(Request $request): bool
     {
-        /** @var PreconditionValidator $validator */
-        $validator = new $this->validator();
-        if (empty($validator->parameter($request))) {
-            $validator->preProcess();
+        if (empty($this->validator->parameter($request))) {
+            $this->validator->preProcess();
 
-            throw new PreconditionRequiredException($validator->getRequiredMessage());
+            throw new PreconditionRequiredException($this->validator->getRequiredMessage());
         }
 
-        if (! $validator($request)) {
-            throw new PreconditionFailedException($validator->getFailedMessage());
+        if (! ($this->validator)($request)) {
+            throw new PreconditionFailedException($this->validator->getFailedMessage());
         }
 
         return true;
