@@ -6,26 +6,26 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/onursimsek/precondition.svg?style=flat-square)](https://scrutinizer-ci.com/g/onursimsek/precondition)
 [![Total Downloads](https://img.shields.io/packagist/dt/onursimsek/precondition.svg?style=flat-square)](https://packagist.org/packages/onursimsek/precondition)
 
-## Installation
+## Kurulum
 
-To install, run the following command in your project:
+Kurulum icin projenizde asagidaki komutu calistirin:
 
 ```shell
 composer require onursimsek/precondition
 ```
 
-## Usage
+## Kullanim
 
-A client has requested a resource from you (GET), and after a while wants to update the resource and send it back to
-you (PUT). Meanwhile, another client has received the same resource (GET) and updated it before the first client (PUT).
-In this case, the first client's update will be based on an incorrect copy and will ignore the second client's updates.
-This is called **[lost update problem](https://www.rfc-editor.org/rfc/rfc6585.txt)**.
+Bir istemci sizden bir kaynagi istemis (GET), bir sure sonra kaynakta guncelleme yapip size geri gondermek (PUT) ister.
+O sirada baska bir istemci de ayni kaynagi almis (GET) ve ilk istemciden once guncellemistir (PUT). Bu durumda ilk
+istemcinin yapmis oldugu guncelleme yanlis bir kopya uzerinden olacaktir ve ikinci istemcinin yaptigi guncellemeleri
+gormezden gelecektir. Buna **[kayip guncelleme problemi](https://www.rfc-editor.org/rfc/rfc6585.txt)** denir.
 
-In such a case, you can return **[428 Precondition Required](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/428)** to the first
-client and ask it to pull the resource again.
+Boyle bir durumda ilk istemciye **[428 Precondition Required](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/428)** donusunde
+bulunarak, kaynagi tekrar cekmesini isteyebilirsiniz.
 
-This package allows you to do this easily. All you need to do is create a **Validator class** and add it as an 
-**attribute** to the corresponding controller method.
+Bu paket bu islemi kolayca yapmanizi saglar. Tek yapmaniz gereken bir **Validator class**'i olusturmak ve ilgili
+controller metoduna **attribute** olarak eklemek.
 
 ```php
 use Illuminate\Http\Request;
@@ -63,11 +63,12 @@ class ArticleController
 }
 ```
 
-You can also use this package if you have any conditions for a request to be fulfilled. For example some examples;
+Bunun disinda bir istegin gerceklestirilmesi icin herhangi bir sartiniz varsa yine bu paketi kullanabilirsiniz. Iste
+bazi ornekler;
 
-### Github Sample
+### Github Ornegi
 
-You are prompted to re-type the repository name before deleting a repository.
+Bir repo silinmeden once repo adinin tekrar yazilmasi istenir.
 
 ```php
 use Illuminate\Http\Request;
@@ -87,12 +88,12 @@ class DeleteRepositoryValidator extends PreconditionValidator
 }
 ```
 
-**Note:** If the repo name is invalid, the response returns with a status code of 
-**[412 Precondition Failed](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412)**.
+**Not:** Repo adi dogru degilse, cevap 
+**[412 Precondition Failed](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412)** durum kodu ile doner.
 
-### SMS Verification
+### SMS ile Dogrulama
 
-SMS verification is a mandatory step in the payment process.
+Odeme islemi yapilmadan once sms dogrulamasi yapilmak istenir.
 
 ```php
 use Illuminate\Http\Request;
@@ -117,14 +118,14 @@ class SmsValidator extends PreconditionValidator
 }
 ```
 
-You can use the **messages()** method in the validator class to customize the error messages.
+Hata mesajlarini ozellestirmek icin validator class'inda **messages()** metodunu kullanabilirsiniz.
 
 ```php
 public function messages(): array
 {
     return [
-        'required' => 'Enter the sms code sent to your phone.',
-        'failed' => 'Incorrect sms code!',
+        'required' => 'Telefonunuza gelen sms kodunu giriniz.',
+        'failed' => 'Sms kodunu dogru girmediniz!',
     ];
 }
 ```

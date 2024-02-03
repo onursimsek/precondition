@@ -49,7 +49,7 @@ class PreconditionTest extends TestCase
         $request->expects($this->exactly(2))
             ->method('header')
             ->with('If-Unmodified-Since')
-            ->willReturn((clone $updatedAt)->addYear());
+            ->willReturn((clone $updatedAt)->addYear()->format(DATE_RFC7231));
 
         $request->expects($this->once())
             ->method('route')
@@ -72,7 +72,7 @@ class PreconditionTest extends TestCase
         $request->expects($this->exactly(2))
             ->method('header')
             ->with('If-Unmodified-Since')
-            ->willReturn($updatedAt);
+            ->willReturn($updatedAt->format(DATE_RFC7231));
 
         $request->expects($this->once())
             ->method('route')
