@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OnurSimsek\Precondition\Tests\Unit\Attributes;
 
 use Illuminate\Http\Request;
@@ -14,6 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
 class PreconditionTest extends TestCase
 {
     private Precondition $precondition;
+
     protected function setUp(): void
     {
         parent::setUp();

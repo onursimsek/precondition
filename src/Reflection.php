@@ -24,7 +24,7 @@ class Reflection
 
     private function getPreconditionAttribute(): ?ReflectionAttribute
     {
-        if (!$attributes = $this->reflectionMethod->getAttributes(Precondition::class)) {
+        if (! $attributes = $this->reflectionMethod->getAttributes(Precondition::class)) {
             return null;
         }
 

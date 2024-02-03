@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OnurSimsek\Precondition\Tests\Unit\Fixtures;
 
 use Illuminate\Http\Request;
