@@ -3,7 +3,6 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/onursimsek/precondition.svg?style=flat-square)](https://packagist.org/packages/onursimsek/precondition)
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Tests](https://github.com/onursimsek/precondition/actions/workflows/run-tests.yml/badge.svg)](https://github.com/onursimsek/precondition/actions)
-[![Quality Score](https://img.shields.io/scrutinizer/g/onursimsek/precondition.svg?style=flat-square)](https://scrutinizer-ci.com/g/onursimsek/precondition)
 [![Total Downloads](https://img.shields.io/packagist/dt/onursimsek/precondition.svg?style=flat-square)](https://packagist.org/packages/onursimsek/precondition)
 
 ## Installation
@@ -35,7 +34,7 @@ class LostUpdateValidator extends PreconditionValidator
 {
     public function parameter(Request $request)
     {
-        return $request->header('If-Match');
+        return $request->header('If-Unmodified-Since');
     }
 
     public function __invoke(Request $request): bool
@@ -107,12 +106,12 @@ class SmsValidator extends PreconditionValidator
 
     public function parameter(Request $request)
     {
-        return cache()->get('sms');
+        return $request->input('sms_code');
     }
 
     public function __invoke(Request $request): bool
     {
-        return $this->parameter($request) == $request->input('sms_code');
+        return $this->parameter($request) == cache()->get('sms');
     }
 }
 ```
