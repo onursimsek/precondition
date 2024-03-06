@@ -6,24 +6,26 @@ namespace OnurSimsek\Precondition\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 use OnurSimsek\Precondition\Reflection;
 use Symfony\Component\HttpFoundation\Response;
 
 class PreconditionRequest
 {
-    public function __construct(private readonly Router $router, private readonly Reflection $reflection)
+    public function __construct(private readonly Reflection $reflection)
     {
     }
 
     public function handle(Request $request, Closure $next)
     {
-        $route = $this->router->getRoutes()->match($request);
-        if (! $route->getControllerClass()) {
+        $currentRoute = Route::getCurrentRoute();
+        $controllerClass = $currentRoute->getControllerClass();
+
+        if (! $controllerClass || in_array($controllerClass, ['\Illuminate\Routing\ViewController'])) {
             return $next($request);
         }
 
-        return $this->handleRequestUsingAttribute($request, $next, $route->getControllerClass(), $route->getActionMethod());
+        return $this->handleRequestUsingAttribute($request, $next, $controllerClass, $currentRoute->getActionMethod());
     }
 
     private function handleRequestUsingAttribute(Request $request, Closure $next, string $controller, string $action): Response
