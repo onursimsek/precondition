@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OnurSimsek\Precondition;
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 use OnurSimsek\Precondition\Middleware\PreconditionRequest;
 
@@ -30,7 +29,6 @@ class PreconditionServiceProvider extends ServiceProvider
 
     protected function registerMiddleware(): void
     {
-        $kernel = $this->app->make(Kernel::class);
-        $kernel->prependMiddleware($this->app->make(PreconditionRequest::class));
+        $this->app['router']->aliasMiddleware('precondition', PreconditionRequest::class);
     }
 }

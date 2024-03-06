@@ -18,12 +18,14 @@ class PreconditionRequest
 
     public function handle(Request $request, Closure $next)
     {
-        $route = $this->router->getRoutes()->match($request);
-        if (! $route->getControllerClass()) {
+        $currentRoute = $this->router->getCurrentRoute();
+        $controllerClass = $currentRoute->getControllerClass();
+
+        if (! $controllerClass || in_array($controllerClass, ['\Illuminate\Routing\ViewController'])) {
             return $next($request);
         }
 
-        return $this->handleRequestUsingAttribute($request, $next, $route->getControllerClass(), $route->getActionMethod());
+        return $this->handleRequestUsingAttribute($request, $next, $controllerClass, $currentRoute->getActionMethod());
     }
 
     private function handleRequestUsingAttribute(Request $request, Closure $next, string $controller, string $action): Response
