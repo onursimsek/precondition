@@ -1,3 +1,9 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://banners.beyondco.de/Precondition.png?theme=dark&packageManager=composer+require&packageName=onursimsek%2Fprecondition&pattern=topography&style=style_2&description=HTTP+Precondition+for+Laravel&md=1&showWatermark=1&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://banners.beyondco.de/Precondition.png?theme=light&packageManager=composer+require&packageName=onursimsek%2Fprecondition&pattern=topography&style=style_2&description=HTTP+Precondition+for+Laravel&md=1&showWatermark=1&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg">
+  <img alt="Package Image" src="https://banners.beyondco.de/Precondition.png?theme=dark&packageManager=composer+require&packageName=onursimsek%2Fprecondition&pattern=topography&style=style_2&description=HTTP+Precondition+for+Laravel&md=1&showWatermark=1&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg">
+</picture>
+
 # HTTP Precondition for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/onursimsek/precondition.svg?style=flat-square)](https://packagist.org/packages/onursimsek/precondition)
