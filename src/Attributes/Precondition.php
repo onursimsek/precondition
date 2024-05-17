@@ -23,6 +23,10 @@ class Precondition implements AttributeContract
 
     public function validate(Request $request): bool
     {
+        if (! $this->validator->when($request)) {
+            return true;
+        }
+
         if (empty($this->validator->parameter($request))) {
             $this->validator->preProcess();
 
