@@ -11,6 +11,7 @@ use OnurSimsek\Precondition\Exceptions\PreconditionFailedException;
 use OnurSimsek\Precondition\Exceptions\PreconditionRequiredException;
 use OnurSimsek\Precondition\Tests\TestCase;
 use OnurSimsek\Precondition\Tests\Unit\Fixtures\LostUpdateValidator;
+use OnurSimsek\Precondition\Tests\Unit\Fixtures\PrivateArticleValidator;
 use PHPUnit\Framework\Attributes\Test;
 
 class PreconditionTest extends TestCase
@@ -80,5 +81,51 @@ class PreconditionTest extends TestCase
             ->willReturn($article);
 
         self::assertTrue($this->precondition->validate($request));
+    }
+
+    #[Test]
+    public function it_can_be_validate_sometimes()
+    {
+        $precondition = new Precondition(PrivateArticleValidator::class);
+
+        $article = new \stdClass();
+        $article->is_private = false;
+
+        $request = $this->getMockBuilder(Request::class)->getMock();
+        $request->expects($this->any())
+            ->method('route')
+            ->with('article')
+            ->willReturn($article);
+
+        self::assertTrue($precondition->validate($request));
+
+        // Private article required exception test
+        $article->is_private = true;
+        self::expectException(PreconditionRequiredException::class);
+        $precondition->validate($request);
+
+        // Private article validation failed exception test
+        $request->expects($this->exactly(2))
+            ->method('header')
+            ->with('X-Article-Secret-Code')
+            ->willReturn(1234);
+
+        $article->is_private = true;
+        $article->secret_code = 4321;
+
+        self::expectException(PreconditionFailedException::class);
+        $precondition->validate($request);
+
+        // Private article validate test
+        $secret = 1234;
+        $request->expects($this->exactly(2))
+            ->method('header')
+            ->with('X-Article-Secret-Code')
+            ->willReturn($secret);
+
+        $article->is_private = true;
+        $article->secret_code = $secret;
+
+        self::assertTrue($precondition->validate($request));
     }
 }
