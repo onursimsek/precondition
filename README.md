@@ -68,6 +68,13 @@ class ArticleController
 }
 ```
 
+Finally, you need to add **precondition** middleware to the **route** you want to use.
+
+```php
+Route::put('/articles/{:article}', [ArticleController::class, 'update'])
+    ->middleware(['precondition']);
+```
+
 You can also use this package if you have any conditions for a request to be fulfilled. For example some examples;
 
 ### Github Sample
@@ -122,6 +129,33 @@ class SmsValidator extends PreconditionValidator
 }
 ```
 
+### Optional Verification
+
+If you want to validate on a case-by-case basis, you can use the **when** method as follows.
+
+```php
+use Illuminate\Http\Request;
+use OnurSimsek\Precondition\Validators\PreconditionValidator;
+
+class PrivateArticleValidator extends PreconditionValidator
+{
+    public function when(Request $request) 
+    {
+        return $request->route('article')->is_private;
+    }
+
+    public function parameter(Request $request)
+    {
+        return $request->header('X-Article-Secret-Code');
+    }
+
+    public function __invoke(Request $request): bool
+    {
+        return $this->parameter($request) == $request->route('article')->secret_code;
+    }
+}
+```
+
 You can use the **messages()** method in the validator class to customize the error messages.
 
 ```php
@@ -133,3 +167,30 @@ public function messages(): array
     ];
 }
 ```
+
+## Testing
+
+```bash
+composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## Credits
+
+- [Onur Simsek](https://github.com/onursimsek)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

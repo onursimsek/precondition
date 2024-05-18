@@ -68,6 +68,13 @@ class ArticleController
 }
 ```
 
+Son olarak kullanmak istediginiz **route**'a **precondition** middleware'ini eklemeniz gerekiyor.
+
+```php
+Route::put('/articles/{:article}', [ArticleController::class, 'update'])
+    ->middleware(['precondition']);
+```
+
 Bunun disinda bir istegin gerceklestirilmesi icin herhangi bir sartiniz varsa yine bu paketi kullanabilirsiniz. Iste
 bazi ornekler;
 
@@ -123,6 +130,33 @@ class SmsValidator extends PreconditionValidator
 }
 ```
 
+### Opsiyonel Dogrulama
+
+Dogrulamayi duruma gore yapmak istiyorsaniz asagidaki gibi **when** method'unu kullanabilirsiniz. 
+
+```php
+use Illuminate\Http\Request;
+use OnurSimsek\Precondition\Validators\PreconditionValidator;
+
+class PrivateArticleValidator extends PreconditionValidator
+{
+    public function when(Request $request) 
+    {
+        return $request->route('article')->is_private;
+    }
+
+    public function parameter(Request $request)
+    {
+        return $request->header('X-Article-Secret-Code');
+    }
+
+    public function __invoke(Request $request): bool
+    {
+        return $this->parameter($request) == $request->route('article')->secret_code;
+    }
+}
+```
+
 Hata mesajlarini ozellestirmek icin validator class'inda **messages()** metodunu kullanabilirsiniz.
 
 ```php
@@ -134,3 +168,30 @@ public function messages(): array
     ];
 }
 ```
+
+## Testing
+
+```bash
+composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## Credits
+
+- [Onur Simsek](https://github.com/onursimsek)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
